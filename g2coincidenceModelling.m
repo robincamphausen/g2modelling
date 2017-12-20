@@ -1,16 +1,17 @@
 % g2 coincidence modelling script
 % Author: Robin Camphausen
-% Last modified: 19/12/2017
+% Last modified: 20/12/2017
 
 % Description: Takes one or several photon inputs (coherent or Fock states) and
 % models photon loss (binomial dist. probability) and splitting through a
 % mirror (also binomial dist.), giving 2-detector coincidence at the end of
 % this whole process.
 % -------------------------------------------------------------------------
-decays = 4:0.5:9;
-for loopyDecays = 1:length(decays)
+% decays = 4:0.5:9;
+% for loopyDecays = 1:length(decays)
 
-clearvars -except decays loopyDecays
+% clearvars -except decays loopyDecays
+clear all
 close all
 
 % Specify input states:
@@ -19,7 +20,7 @@ pulsePeriod = 12.5; %in ns
 
 % Number of loops - i.e. total number of photon states considered is
 % numLoops*numPulses
-numLoops = 100000;
+numLoops = 1;
 % numLoops = 100;
 
 N_Fock = 1; %number of photons per pulse if choosing Fock state
@@ -28,8 +29,8 @@ whatTheFock1 = 1; %if ==1 then input1 is a Fock state, if ==0 no input1
 whatTheFock2 = 0; %if ==1 then input2 is a Fock state, if ==0 no input2
 
 % Specify input state decay lifetimes (exponential decay):
-% tauDecay1 = 6.5; %in ns
-tauDecay1 = decays(loopyDecays); %in ns
+tauDecay1 = 6.5; %in ns
+% tauDecay1 = decays(loopyDecays); %in ns
 tauDecay2 = 5; %in ns
 
 % Specify system loss and detector dead time:
@@ -177,6 +178,6 @@ display(timeBS)
 display(timeDT)
 display(timeSortingCoinc)
 
-filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
-save(filename)
-end
+% filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
+% save(filename)
+% end
