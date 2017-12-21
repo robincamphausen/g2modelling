@@ -1,9 +1,12 @@
 function [ output ] = deadtime( input, deadTime )
 %deadtime function: Removes timestamps that would not be detected due to
 %detector lifetime
+% IMPORTANT: input can be unsorted timestamps but only from one single
+% channel at a time
 % Author: Robin Camphausen
-% Last modified: 12/12/2017
+% Last modified: 22/12/2017
 
+% -Sorts timestamps
 % -Very first timestamp is kept.
 % -Calculates the interphoton delays, i.e. the diff between consecutive
 % detections.
@@ -15,6 +18,7 @@ function [ output ] = deadtime( input, deadTime )
 % -------------------------------------------------------------------------
 
 timeSinceLastDetection = 0;
+input = sortrows(input')';
 interphotonDelays = abs(diff(input));
 
 for i = 1:length(interphotonDelays)
