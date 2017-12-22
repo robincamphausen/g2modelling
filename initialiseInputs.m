@@ -27,13 +27,15 @@ if whatTheFock1 ~= 0
 % If coherent state, number of photons given by Poisson distribution with
 % mean N_coherent
     end
-end
+
 % get rid of zero elements (if coherent state has timebins with no photons)
 inputHasNoPhotons = input(1,:)==0;
 input(:,inputHasNoPhotons) = [];
 % Add time randomly drawn from exponential decay with decay lifetime
 % tauDecay1:
 input(2,:) = input(2,:) - tauDecay1*log(rand(1,length(input(1,:))));
+end
+
 
 if whatTheFock2 ~= 0
     input2 = zeros(2,numPulses);
@@ -47,7 +49,7 @@ if whatTheFock2 ~= 0
 % If coherent state, number of photons given by Poisson distribution with
 % mean N_coherent
     end
-end
+
 % get rid of zero elements (if coherent state has timebins with no photons)
 input2HasNoPhotons = input2(1,:)==0;
 input2(:,input2HasNoPhotons) = [];
@@ -56,7 +58,7 @@ input2(:,input2HasNoPhotons) = [];
 input2(2,:) = input2(2,:) - tauDecay2*log(rand(1,length(input2(1,:))));
 
 input = [input input2];
-
+end
 % maybe don't need to sort here, as we are sorting later anyway?
 % input = sortrows(input',2)';
 

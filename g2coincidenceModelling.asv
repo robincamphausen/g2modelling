@@ -7,11 +7,11 @@
 % mirror (also binomial dist.), giving 2-detector coincidence at the end of
 % this whole process.
 % -------------------------------------------------------------------------
-% decays = 4:0.5:9;
-% for loopyDecays = 1:length(decays)
+decays = 4:0.5:9;
+for loopyDecays = 1:length(decays)
 
-% clearvars -except decays loopyDecays
-clear all
+clearvars -except decays loopyDecays
+% clear all
 close all
 
 % Specify input states:
@@ -20,7 +20,7 @@ pulsePeriod = 12.5; %in ns
 
 % Number of loops - i.e. total number of photon states considered is
 % numLoops*numPulses
-numLoops = 100;
+numLoops = 1;
 % numLoops = 100;
 
 N_Fock = 1; %number of photons per pulse if choosing Fock state
@@ -31,11 +31,11 @@ N_coherent = 1; %mean number of photons per pulse if choosing coherent state
 % whatTheFock1+whatTheFock2 < 3 if neither state is coherent - and thus
 % there is no need to rerun initialisation of pulsetrain):
 whatTheFock1 = 1; 
-whatTheFock2 = 1;
+whatTheFock2 = 0;
 
 % Specify input state decay lifetimes (exponential decay):
-tauDecay1 = 6.5; %in ns
-% tauDecay1 = decays(loopyDecays); %in ns
+% tauDecay1 = 6.5; %in ns
+tauDecay1 = decays(loopyDecays); %in ns
 tauDecay2 = 5; %in ns
 
 % Specify system loss and detector dead time:
@@ -45,6 +45,10 @@ deadTime = 2000; % in ns
 % timebin for plotting:
 bin = 1;
 
+% -------------------------------------------------------------------------
+% Initialise pulsetrain variables and apply exponential decays according to
+% the input state decay lifetimes
+
 % Initialise coincidences and time variables:
 coincidences = [];
 timeInit = 0;
@@ -52,11 +56,6 @@ timeLoss = 0;
 timeBS = 0;
 timeDT = 0;
 timeSortingCoinc = 0;
-
-
-% -------------------------------------------------------------------------
-% Initialise pulsetrain variables and apply exponential decays according to
-% the input state decay lifetimes
 tic
 
 % Photon input is 2*numPulses matrices, where the first row gives the number of
@@ -136,25 +135,32 @@ end
 % -------------------------------------------------------------------------
 tic
 % Plot histogram of coincidences:
-figure;
+thisHistericalHistogram = figure;
 lbx = 'Relative Delay [ns]';
 lby = 'Coincidences';
+lbtit = strcat('Single photon emitter with decay lifetime \bf{\tau}=', num2str(tauDecay1), 'ns');
 h1 = histogram(coincidences, -100: bin :100);
 
 h1.FaceColor = [0.5, 0.5, 0.5];
 fontsize = 20;
-
-set(gca,'FontSize',24);
+xlabel(lbx);
+ylabel(lby);
+title(lbtit);
+set(gca,'FontSize',12);
 % set(gcf, 'Position', [100, 300, 900, 700]);
 pbaspect([9 7 1]);
-display('plotting:')
+% display('plotting:')
 toc
-display(timeInit)
-display(timeLoss)
-display(timeBS)
-display(timeDT)
-display(timeSortingCoinc)
+% display(timeInit)
+% display(timeLoss)
+% display(timeBS)
+% display(timeDT)
+% display(timeSortingCoinc)
 
-% filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
-% save(filename)
-% end
+% addpath('./singlePhotonEmitter')
+filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
+save(filename, 'coincidences')
+filenameHist = strcat('histogram_tauDecay1_', num2str(tauDecay1), 'ns.png');
+saveas(thisHistericalHistogram,filenameHist);
+
+end
