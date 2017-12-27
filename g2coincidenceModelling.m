@@ -17,13 +17,13 @@ clearvars -except decays1 loopyDecays1 decays2 loopyDecays2
 close all
 
 % Specify input states:
-numPulses = 1e1; %number of consecutive pulses passing through set-up per loop
+numPulses = 1e7; %number of consecutive pulses passing through set-up per loop
 pulsePeriod = 12.5; %in ns
 
 % Number of loops - i.e. total number of photon states considered is
 % numLoops*numPulses
-numLoops = 1;
-% numLoops = 2000;
+% numLoops = 1;
+numLoops = 2000;
 
 N_Fock = 1; %number of photons per pulse if choosing Fock state
 N_coherent = 1; %mean number of photons per pulse if choosing coherent state
