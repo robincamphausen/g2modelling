@@ -1,12 +1,22 @@
-% g2 coincidence modelling script
+% g2 coincidence modelling script as a function for a three- level
+% single emitter system
 % Author: Robin Camphausen
-% Last modified: 22/12/2017
+% Last modified: 27/12/2017
 
 % Description: Takes one or several photon inputs (coherent or Fock states) and
 % models photon loss (binomial dist. probability) and splitting through a
 % mirror (also binomial dist.), giving 2-detector coincidence at the end of
 % this whole process.
+
+% Emitter is modelled as a three-level system where there is a
+% non-radiative decay from the excited to the metastable state with
+% lifetime tauDelta1, and a radiative decay from the metastable to the
+% ground state with tauDelta2
+% This script is (for now) dodgily run as a function which is run from
+% inside the main g2coincidenceModelling script
 % -------------------------------------------------------------------------
+function[] = g2coincidence_3levelSPE(decays1, decays2)
+
 decays1 = 1:2:11;
 decays2 = 1:4:21;
 for loopyDecays1 = 1:length(decays1)
@@ -33,7 +43,7 @@ N_coherent = 1; %mean number of photons per pulse if choosing coherent state
 % whatTheFock1+whatTheFock2 < 3 if neither state is coherent - and thus
 % there is no need to rerun initialisation of pulsetrain):
 whatTheFock1 = 1; 
-whatTheFock2 = 0;
+whatTheFock2 = 1;
 
 % Specify input state decay lifetimes (exponential decay):
 % tauDecay1 = 6.5; %in ns
@@ -145,7 +155,7 @@ thisHistericalHistogram = figure;
 lbx = 'Relative Delay [ns]';
 lby = 'Coincidences';
 lbtit = strcat('Two single photon emitters: \bf{\tau_1}=', num2str(tauDecay1),...
-    'ns, \bf{\tau_2}=', num2str(tauDecay1));
+    'ns, \bf{\tau_2}=', num2str(tauDecay2));
 h1 = histogram(coincidences, -plottingRange: bin :plottingRange);
 
 h1.FaceColor = [0.5, 0.5, 0.5];
@@ -165,11 +175,15 @@ display(timeDT)
 display(timeSortingCoinc)
 
 % addpath('./singlePhotonEmitter')
-filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
-filename = strcat('twoSPE_tauDecay1_', num2str(tauDecay1), 'ns.mat');
+% filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
+filename = strcat('twoSPE_tauDecay1_', num2str(tauDecay1),...
+    'ns_tauDecay2_', num2str(tauDecay2), 'ns.mat');
 save(filename, 'coincidences')
-filenameHist = strcat('histogram_tauDecay1_', num2str(tauDecay1), 'ns.png');
+% filenameHist = strcat('histogram_tauDecay1_', num2str(tauDecay1), 'ns.png');
+filenameHist = strcat('histogramTwoSPE_tauDecay1_', num2str(tauDecay1),...
+    'ns_tauDecay2_', num2str(tauDecay2), 'ns.png');
 saveas(thisHistericalHistogram,filenameHist);
 
     end
+end
 end
