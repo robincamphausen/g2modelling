@@ -15,25 +15,25 @@
 % This script is (for now) dodgily run as a function which is run from
 % inside the main g2coincidenceModelling script
 % -------------------------------------------------------------------------
-function[] = g2coincidence_3levelSPE(decays1, decays2)
+function[] = g2coincidence_3levelSPE(decays1, decays2, numPulses, numLoops, bin)
 % 
 % decays1 = 1:2:11;
 % decays2 = 1:4:21;
 for loopyDecays1 = 1:length(decays1)
     for loopyDecays2  = 1:length(decays2)
 
-clearvars -except decays1 loopyDecays1 decays2 loopyDecays2
+clearvars -except decays1 loopyDecays1 decays2 loopyDecays2 numPulses numLoops bin
 % clear all
 close all
 
 % Specify input states:
-numPulses = 1e7; %number of consecutive pulses passing through set-up per loop
+% numPulses = 1e7; %number of consecutive pulses passing through set-up per loop
 pulsePeriod = 12.5; %in ns
 
 % Number of loops - i.e. total number of photon states considered is
 % numLoops*numPulses
 % numLoops = 1;
-numLoops = 2000;
+% numLoops = 2000;
 
 N_Fock = 1; %number of photons per pulse if choosing Fock state
 N_coherent = 1; %mean number of photons per pulse if choosing coherent state
@@ -56,7 +56,7 @@ transmissionProb = 0.001; %transmissionProb==1 means no loss, ==0 means perfect 
 deadTime = 2000; % in ns
 
 % timebin for plotting:
-bin = 0.5;
+% bin = 0.5;
 plottingRange = 100;
 
 % -------------------------------------------------------------------------
@@ -75,13 +75,13 @@ tic
 % Photon input is 2*numPulses matrices, where the first row gives the number of
 % photons in each time bin and the second row the timing of each bin (note
 % that timebins with zero photons are always removed to speed up calculation)
-input  = initialiseInputs( whatTheFock1,whatTheFock2,numPulses,...
+input  = initialiseInputs3level( whatTheFock1,whatTheFock2,numPulses,...
     pulsePeriod, N_Fock, N_coherent, tauDecay1, tauDecay2);
 % -------------------------------------------------------------------------
 
 for loopLooper = 1:numLoops
-    if loopLooper~=1 && (whatTheFock1+whatTheFock2)>=3
-        input  = initialiseInputs( whatTheFock1,whatTheFock2,numPulses,...
+    if loopLooper~=1 %&& (whatTheFock1+whatTheFock2)>=3
+        input  = initialiseInputs3level( whatTheFock1,whatTheFock2,numPulses,...
     pulsePeriod, N_Fock, N_coherent, tauDecay1, tauDecay2);
 % i.e. if one or both inputs is coherent, have to redo initialisation as
 % coherent distribution is probabilistic, whereas Fock state is always the
@@ -154,7 +154,7 @@ tic
 thisHistericalHistogram = figure;
 lbx = 'Relative Delay [ns]';
 lby = 'Coincidences';
-lbtit = strcat('Two single photon emitters: \bf{\tau_1}=', num2str(tauDecay1),...
+lbtit = strcat('3-level single photon emitter: \bf{\tau_1}=', num2str(tauDecay1),...
     'ns, \bf{\tau_2}=', num2str(tauDecay2));
 h1 = histogram(coincidences, -plottingRange: bin :plottingRange);
 
@@ -176,11 +176,11 @@ display(timeSortingCoinc)
 
 % addpath('./singlePhotonEmitter')
 % filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
-filename = strcat('twoSPE_tauDecay1_', num2str(tauDecay1),...
+filename = strcat('threeLevelSPE_tauDecay1_', num2str(tauDecay1),...
     'ns_tauDecay2_', num2str(tauDecay2), 'ns.mat');
 save(filename, 'coincidences')
 % filenameHist = strcat('histogram_tauDecay1_', num2str(tauDecay1), 'ns.png');
-filenameHist = strcat('histogramTwoSPE_tauDecay1_', num2str(tauDecay1),...
+filenameHist = strcat('histogram_threeLevelSPE_tauDecay1_', num2str(tauDecay1),...
     'ns_tauDecay2_', num2str(tauDecay2), 'ns.png');
 saveas(thisHistericalHistogram,filenameHist);
 
