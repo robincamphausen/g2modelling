@@ -7,8 +7,8 @@
 % mirror (also binomial dist.), giving 2-detector coincidence at the end of
 % this whole process.
 % -------------------------------------------------------------------------
-decays1 = 1:2:11;
-decays2 = 1:4:21;
+decays1 = 1:3;
+decays2 = 18:1:24;
 for loopyDecays1 = 1:length(decays1)
     for loopyDecays2  = 1:length(decays2)
 
@@ -33,7 +33,7 @@ N_coherent = 1; %mean number of photons per pulse if choosing coherent state
 % whatTheFock1+whatTheFock2 < 3 if neither state is coherent - and thus
 % there is no need to rerun initialisation of pulsetrain):
 whatTheFock1 = 1; 
-whatTheFock2 = 0;
+whatTheFock2 = 1;
 
 % Specify input state decay lifetimes (exponential decay):
 % tauDecay1 = 6.5; %in ns
@@ -145,7 +145,7 @@ thisHistericalHistogram = figure;
 lbx = 'Relative Delay [ns]';
 lby = 'Coincidences';
 lbtit = strcat('Two single photon emitters: \bf{\tau_1}=', num2str(tauDecay1),...
-    'ns, \bf{\tau_2}=', num2str(tauDecay1));
+    'ns, \bf{\tau_2}=', num2str(tauDecay2));
 h1 = histogram(coincidences, -plottingRange: bin :plottingRange);
 
 h1.FaceColor = [0.5, 0.5, 0.5];
@@ -165,10 +165,13 @@ display(timeDT)
 display(timeSortingCoinc)
 
 % addpath('./singlePhotonEmitter')
-filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
-filename = strcat('twoSPE_tauDecay1_', num2str(tauDecay1), 'ns.mat');
+% filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
+filename = strcat('twoSPE_tauDecay1_', num2str(tauDecay1),...
+    'ns_tauDecay2_', num2str(tauDecay2), 'ns.mat');
 save(filename, 'coincidences')
-filenameHist = strcat('histogram_tauDecay1_', num2str(tauDecay1), 'ns.png');
+% filenameHist = strcat('histogram_tauDecay1_', num2str(tauDecay1), 'ns.png');
+filenameHist = strcat('histogramTwoSPE_tauDecay1_', num2str(tauDecay1),...
+    'ns_tauDecay2_', num2str(tauDecay2), 'ns.png');
 saveas(thisHistericalHistogram,filenameHist);
 
     end

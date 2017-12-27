@@ -16,9 +16,9 @@
 % inside the main g2coincidenceModelling script
 % -------------------------------------------------------------------------
 function[] = g2coincidence_3levelSPE(decays1, decays2)
-
-decays1 = 1:2:11;
-decays2 = 1:4:21;
+% 
+% decays1 = 1:2:11;
+% decays2 = 1:4:21;
 for loopyDecays1 = 1:length(decays1)
     for loopyDecays2  = 1:length(decays2)
 
@@ -33,7 +33,7 @@ pulsePeriod = 12.5; %in ns
 % Number of loops - i.e. total number of photon states considered is
 % numLoops*numPulses
 % numLoops = 1;
-numLoops = 1000;
+numLoops = 2000;
 
 N_Fock = 1; %number of photons per pulse if choosing Fock state
 N_coherent = 1; %mean number of photons per pulse if choosing coherent state
@@ -43,12 +43,12 @@ N_coherent = 1; %mean number of photons per pulse if choosing coherent state
 % whatTheFock1+whatTheFock2 < 3 if neither state is coherent - and thus
 % there is no need to rerun initialisation of pulsetrain):
 whatTheFock1 = 1; 
-whatTheFock2 = 1;
+whatTheFock2 = 0;
 
 % Specify input state decay lifetimes (exponential decay):
 % tauDecay1 = 6.5; %in ns
 tauDecay1 = decays1(loopyDecays1); %in ns
-tauDecay2 = 5; %in ns
+% tauDecay2 = 5; %in ns
 tauDecay2 = decays2(loopyDecays2); %in ns
 
 % Specify system loss and detector dead time:
@@ -56,7 +56,7 @@ transmissionProb = 0.001; %transmissionProb==1 means no loss, ==0 means perfect 
 deadTime = 2000; % in ns
 
 % timebin for plotting:
-bin = 1;
+bin = 0.5;
 plottingRange = 100;
 
 % -------------------------------------------------------------------------

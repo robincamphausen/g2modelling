@@ -7,8 +7,8 @@
 % mirror (also binomial dist.), giving 2-detector coincidence at the end of
 % this whole process.
 % -------------------------------------------------------------------------
-decays1 = 1:2:11;
-decays2 = 1:4:21;
+decays1 = 1:3;
+decays2 = 18:2:24;
 for loopyDecays1 = 1:length(decays1)
     for loopyDecays2  = 1:length(decays2)
 
@@ -23,7 +23,7 @@ pulsePeriod = 12.5; %in ns
 % Number of loops - i.e. total number of photon states considered is
 % numLoops*numPulses
 % numLoops = 1;
-numLoops = 1000;
+numLoops = 2000;
 
 N_Fock = 1; %number of photons per pulse if choosing Fock state
 N_coherent = 1; %mean number of photons per pulse if choosing coherent state
@@ -46,7 +46,7 @@ transmissionProb = 0.001; %transmissionProb==1 means no loss, ==0 means perfect 
 deadTime = 2000; % in ns
 
 % timebin for plotting:
-bin = 1;
+bin = 0.5;
 plottingRange = 100;
 
 % -------------------------------------------------------------------------
