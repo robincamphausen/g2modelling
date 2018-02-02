@@ -7,8 +7,8 @@
 % mirror (also binomial dist.), giving 2-detector coincidence at the end of
 % this whole process.
 % -------------------------------------------------------------------------
-decays1 = 1:3;
-decays2 = 18:2:24;
+decays1 = 2:0.25:3;
+decays2 = 18:1:24;
 for loopyDecays1 = 1:length(decays1)
     for loopyDecays2  = 1:length(decays2)
 
@@ -23,7 +23,7 @@ pulsePeriod = 12.5; %in ns
 % Number of loops - i.e. total number of photon states considered is
 % numLoops*numPulses
 % numLoops = 1;
-numLoops = 2000;
+numLoops = 20000;
 
 N_Fock = 1; %number of photons per pulse if choosing Fock state
 N_coherent = 1; %mean number of photons per pulse if choosing coherent state
@@ -38,12 +38,12 @@ whatTheFock2 = 1;
 % Specify input state decay lifetimes (exponential decay):
 % tauDecay1 = 6.5; %in ns
 tauDecay1 = decays1(loopyDecays1); %in ns
-tauDecay2 = 5; %in ns
+% tauDecay2 = 5; %in ns
 tauDecay2 = decays2(loopyDecays2); %in ns
 
 % Specify system loss and detector dead time:
 transmissionProb = 0.001; %transmissionProb==1 means no loss, ==0 means perfect loss
-deadTime = 2000; % in ns
+deadTime = 10000; % in ns
 
 % timebin for plotting:
 bin = 0.5;
@@ -140,6 +140,10 @@ end
 
 % -------------------------------------------------------------------------
 tic
+% save histogram as bins and as y_hist vector too:
+bins = -plottingRange: bin :plottingRange;
+y_hist = histcounts(coincidences,bins);
+
 % Plot histogram of coincidences:
 thisHistericalHistogram = figure;
 lbx = 'Relative Delay [ns]';
@@ -168,7 +172,7 @@ display(timeSortingCoinc)
 % filename = strcat('singlePhoton_tauDecay1_', num2str(tauDecay1), 'ns.mat');
 filename = strcat('twoSPE_tauDecay1_', num2str(tauDecay1),...
     'ns_tauDecay2_', num2str(tauDecay2), 'ns.mat');
-save(filename, 'coincidences')
+save(filename, 'coincidences', 'bins', 'y_hist')
 % filenameHist = strcat('histogram_tauDecay1_', num2str(tauDecay1), 'ns.png');
 filenameHist = strcat('histogramTwoSPE_tauDecay1_', num2str(tauDecay1),...
     'ns_tauDecay2_', num2str(tauDecay2), 'ns.png');
@@ -176,4 +180,4 @@ saveas(thisHistericalHistogram,filenameHist);
 
     end
 end
-g2coincidence_3levelSPE(decays1, decays2,numPulses, numLoops, bin);
+% g2coincidence_3levelSPE(decays1, decays2,numPulses, numLoops, bin);
