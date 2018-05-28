@@ -7,8 +7,8 @@
 % mirror (also binomial dist.), giving 2-detector coincidence at the end of
 % this whole process.
 % -------------------------------------------------------------------------
-decays1 = 2:0.25:3;
-decays2 = 18:1:24;
+decays1 = 5.6;
+decays2 = 4.6;
 for loopyDecays1 = 1:length(decays1)
     for loopyDecays2  = 1:length(decays2)
 
@@ -23,7 +23,7 @@ pulsePeriod = 12.5; %in ns
 % Number of loops - i.e. total number of photon states considered is
 % numLoops*numPulses
 % numLoops = 1;
-numLoops = 20000;
+numLoops = 1000;
 
 N_Fock = 1; %number of photons per pulse if choosing Fock state
 N_coherent = 1; %mean number of photons per pulse if choosing coherent state
@@ -33,7 +33,7 @@ N_coherent = 1; %mean number of photons per pulse if choosing coherent state
 % whatTheFock1+whatTheFock2 < 3 if neither state is coherent - and thus
 % there is no need to rerun initialisation of pulsetrain):
 whatTheFock1 = 1; 
-whatTheFock2 = 1;
+whatTheFock2 = 0;
 
 % Specify input state decay lifetimes (exponential decay):
 % tauDecay1 = 6.5; %in ns
@@ -60,6 +60,7 @@ timeLoss = 0;
 timeBS = 0;
 timeDT = 0;
 timeSortingCoinc = 0;
+numDetections = 0;
 tic
 
 % Photon input is 2*numPulses matrices, where the first row gives the number of
@@ -105,7 +106,7 @@ ch1 = ch1(2,thisTimebinHasPhotons);
 % the number of photons is now no longer important.
 timeBS = timeBS + toc;
 
-% Apply detection: Call Transmitted detections channel 0 and Reflected
+% Apply deadtime: Call Transmitted detections channel 0 and Reflected
 % detections channel 1
 tic
 ch0 = deadtime(ch0,deadTime); %take into account DT
@@ -113,6 +114,8 @@ ch0(2,:) = 0; %channel marker (as ch0-ch1 is positive delta tau)
 
 ch1 = deadtime(ch1,deadTime); %take into account DT
 ch1(2,:) = 1; %channel marker (as ch1-ch0 is negative delta tau)
+
+numDetections = numDetections + length(ch0(2,:)) + length(ch1(2,:));
 
 timeDT = timeDT + toc;
 % -------------------------------------------------------------------------
@@ -181,3 +184,6 @@ saveas(thisHistericalHistogram,filenameHist);
     end
 end
 % g2coincidence_3levelSPE(decays1, decays2,numPulses, numLoops, bin);
+
+totalTime = numPulses*numLoops*12.5*1E-9; %total time in seconds
+numDetections
